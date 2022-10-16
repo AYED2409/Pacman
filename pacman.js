@@ -19,7 +19,9 @@ pacman ={
             this.GenerarPosicionPacman();
             this.GenerarPosicionFantasma();
             this.ComprobarBotones();
+            this.ComrpobarReset();
         }
+        //Se recorre la matriz y se pinta NEGRO=muro, AMARILLO=Pacman, Rojo=Fantasma
         PintarMapa(){
             var div =document.getElementById('tabla');
             div.innerHTML="";
@@ -44,10 +46,11 @@ pacman ={
                         this.posicionFantasma[0]=i;
                         this.posicionFantasma[1]=j;
                     }
-                    tr.appendChild(td)
+                    tr.appendChild(td);
                 }
             }
         }
+        //Genera una posición aleatoria de  Pacman en la matriz, en una ubicación distinta de los muros
         GenerarPosicionPacman(){
             let random1=Math.floor(Math.random()*this.array.length);
             let random2=Math.floor(Math.random()*this.array.length);
@@ -59,6 +62,7 @@ pacman ={
             document.getElementById('tabla').innerHTML="";
             //this.PintarMapa()
         }
+        //Genera una posicion aleataroia del Fantasma en la matriz, en una ubicacion distinta de los muros y de Pacman
         GenerarPosicionFantasma(){
             let random1=Math.floor(Math.random()*this.array.length);
             let random2=Math.floor(Math.random()*this.array.length);
@@ -70,6 +74,7 @@ pacman ={
             document.getElementById('tabla').innerHTML="";
             this.PintarMapa();
         }
+        //Comprueba el movimiento que desea realizar el usuario, a continuacion se mueve el fantasma aleatoriamente
         ComprobarBotones(){
             let botones=document.getElementById('botones');
             botones.onclick=(e) =>{
@@ -92,64 +97,69 @@ pacman ={
                 }
             }
         }
+        //Mueve un elemento, se indica pos1=indica el indice del array, pos2=indica indice del elemento del array, arrayPropio= array de la posicion del elemento a mover(posicionPacman o PosicionFantasma), arrayEnemigo= array de la posicion del elemento rival(posicionFantasma o posicionPacman)
         Mover(pos1,pos2,arrayPropio,arrayEnemigo){
             if(pos1>this.array.length-1 || pos2>this.array.length-1 || pos1<0 || pos2<0 || this.array[pos1][pos2]=='x'){
-                console.log("movimiento incorrecto")
+                //console.log("movimiento incorrecto")
             }else{
                 this.array[pos1][pos2]=this.array[arrayPropio[0]][arrayPropio[1]];
                 this.array[arrayPropio[0]][arrayPropio[1]]='';
                 arrayPropio[0]=pos1;
                 arrayPropio[1]=pos2;
                 if(arrayPropio[0]==arrayEnemigo[0] && arrayPropio[1]==arrayEnemigo[1]){
-                    document.getElementById('mensaje').innerHTML='Perdiste!!!!!';
+                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡¡¡Perdiste!!!!!!!!';
                     this.array[arrayEnemigo[0]][arrayEnemigo[1]]='F';
                     this.PintarMapa();
                     document.getElementById('botones').style.pointerEvents='none';
                 }
             }
         }
+        //Mueve el fantasma,se genera un numero aleatiro de 0-3(0=arriba,1=izquierda,2=abajo,3=derecha), si no se puede mover a la direccion aleatoria se vuelve a llamar a la funcion hasta generar un movimiento posible
         MoverFantasma(){
             let random1=Math.floor(Math.random()*4);
             if(random1==0){
-                console.log("arriba")
+                //console.log("arriba")
                 if(this.posicionFantasma[0]>0 && this.array[this.posicionFantasma[0]-1][this.posicionFantasma[1]]!='x'){
-                    //console.log("si puede subir")
-                    //console.log("posicionFantasma0---_>: "+this.posicionFantasma[0])
                     this.Mover((this.posicionFantasma[0])-1,this.posicionFantasma[1],this.posicionFantasma,this.posicionPacman);
                 }else{
-                    //console.log("no puede subir")
-                    this.MoverFantasma()
+                    this.MoverFantasma();
                 }
             }else if(random1==1){
-                console.log("izquierda")
+                //console.log("izquierda")
                 if(this.posicionFantasma[1]>0 && this.array[this.posicionFantasma[0]][this.posicionFantasma[1]-1]!='x'){
                     this.Mover((this.posicionFantasma[0]),this.posicionFantasma[1]-1,this.posicionFantasma,this.posicionPacman);
                 }else{
-                    //console.log("no puede izquierda")
                     this.MoverFantasma();
                 }
-                
             }else if(random1==2){
-                console.log("abajo")
+                //console.log("abajo")
                 if(this.posicionFantasma[0]<this.array.length-1 && this.array[this.posicionFantasma[0]+1][this.posicionFantasma[1]]!='x'){
                     this.Mover((this.posicionFantasma[0])+1,this.posicionFantasma[1],this.posicionFantasma,this.posicionPacman);
                 }else{
-                    //console.log("no puede bajar")
-                    this.MoverFantasma()
+                    this.MoverFantasma();
                 }
-                
             }else if(random1==3){
-                console.log("derecha")
+                //console.log("derecha")
                 if(this.posicionFantasma[1]<this.array.length-1 && this.array[this.posicionFantasma[0]][this.posicionFantasma[1]+1]!='x'){
                     this.Mover((this.posicionFantasma[0]),this.posicionFantasma[1]+1,this.posicionFantasma,this.posicionPacman);
                 }else{
-                   // console.log("no puede derecha")
-                    this.MoverFantasma()
-                }
-                
+                    this.MoverFantasma();
+                } 
+            }
+        }
+        //Reinicia el juego, se reestablecen los valores necesarios y se llama a la funcion de iniciar
+        ComrpobarReset(){
+            var btnReset=document.getElementById('resetear');
+            btnReset.onclick=()=>{
+                document.getElementById('tabla').innerHTML=""
+                document.getElementById('mensaje').innerHTML="Pacman"
+                this.array[this.posicionPacman[0]][this.posicionPacman[1]]=0;
+                this.array[this.posicionFantasma[0]][this.posicionFantasma[1]]=0;
+                document.getElementById('botones').style.pointerEvents='auto';
+                this.init();
             }
         }
     } 
 }
-var juego = new pacman.Pacman()
-juego.init()
+var juego = new pacman.Pacman();
+juego.init();
