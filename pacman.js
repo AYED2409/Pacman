@@ -99,14 +99,26 @@ pacman ={
             }
         }
         Mover(pos1,pos2){
-            console.log("posicion actual"+this.posicionPacman[0]+" "+this.posicionPacman[1])
-            this.array[pos1][pos2]='C'
-            this.array[this.posicionPacman[0]][this.posicionPacman[1]]=''
-            this.posicionPacman[0]=pos1
-            this.posicionPacman[1]=pos2
-            console.log("posicion a mover :"+pos1+" "+pos2)
-            console.log(this.array[pos1][pos2])
-
+            console.log("posicion 1 ::::"+pos1)
+            console.log("posicion2 ::::"+pos2)
+            if(pos1>this.array.length-1 || pos2>this.array.length-1 || pos1<0 || pos2<0 || this.array[pos1][pos2]=='x'){
+                console.log("movimiento incorrecto")
+            }else{
+                console.log("posicion actual"+this.posicionPacman[0]+" "+this.posicionPacman[1])
+                this.array[pos1][pos2]='C'
+                this.array[this.posicionPacman[0]][this.posicionPacman[1]]=''
+                this.posicionPacman[0]=pos1
+                this.posicionPacman[1]=pos2
+                if(this.posicionPacman[0]==this.posicionFantasma[0] && this.posicionPacman[1]==this.posicionFantasma[1]){
+                    //console.log("As perdido")
+                    document.getElementById('mensaje').innerHTML='Perdiste!!!!!'
+                    this.array[this.posicionFantasma[0]][this.posicionFantasma[1]]='F'
+                    this.PintarMapa()
+                    document.getElementById('botones').style.pointerEvents='none'
+                }
+                console.log("posicion a mover :"+pos1+" "+pos2)
+                console.log(this.array[pos1][pos2])
+            }
         }
     } 
 }
