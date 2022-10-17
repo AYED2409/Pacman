@@ -151,8 +151,8 @@ pacman ={
         ComrpobarReset(){
             var btnReset=document.getElementById('resetear');
             btnReset.onclick=()=>{
-                document.getElementById('tabla').innerHTML=""
-                document.getElementById('mensaje').innerHTML="Pacman"
+                document.getElementById('tabla').innerHTML="";
+                document.getElementById('mensaje').innerHTML="Pacman";
                 this.array[this.posicionPacman[0]][this.posicionPacman[1]]=0;
                 this.array[this.posicionFantasma[0]][this.posicionFantasma[1]]=0;
                 document.getElementById('botones').style.pointerEvents='auto';

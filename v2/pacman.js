@@ -21,11 +21,11 @@ pacman ={
             this.GenerarPosicionFantasma();
             this.ComprobarBotones();
             this.ComrpobarReset();
-            this.GenerarIntervalo()
+            this.GenerarIntervalo();
         }
+        //mueve el Fantasma cada 1 segundo, se detiene cuando Pacman es comido
         GenerarIntervalo(){
-            this.intervalo=setInterval(()=>this.MoverFantasma(),1000)
-            
+            this.intervalo=setInterval(()=>this.MoverFantasma(),1000);    
         }
         //Se recorre la matriz y se pinta NEGRO=muro, AMARILLO=Pacman, Rojo=Fantasma
         PintarMapa(){
@@ -86,19 +86,15 @@ pacman ={
             botones.onclick=(e) =>{
                 if(e.target.id=='arriba'){
                     this.Mover((this.posicionPacman[0])-1,this.posicionPacman[1],this.posicionPacman,this.posicionFantasma);
-                    //this.MoverFantasma();
                     this.PintarMapa();
                 }else if(e.target.id=='abajo'){
                     this.Mover((this.posicionPacman[0])+1,this.posicionPacman[1],this.posicionPacman,this.posicionFantasma);
-                   //this.MoverFantasma();
                     this.PintarMapa();
                 }else if(e.target.id=='derecha'){
                     this.Mover(this.posicionPacman[0],(this.posicionPacman[1])+1,this.posicionPacman,this.posicionFantasma);
-                    //this.MoverFantasma();
                     this.PintarMapa();
                 }else if(e.target.id=='izquierda'){
                     this.Mover(this.posicionPacman[0],(this.posicionPacman[1])-1,this.posicionPacman,this.posicionFantasma);
-                    //this.MoverFantasma();
                     this.PintarMapa();
                 }
             }
@@ -152,17 +148,17 @@ pacman ={
                     this.MoverFantasma();
                 } 
             }
-            this.PintarMapa()
+            this.PintarMapa();
             if(this.posicionFantasma[0]==this.posicionPacman[0] && this.posicionPacman[1]==this.posicionFantasma[1]){
-                clearInterval(this.intervalo)
+                clearInterval(this.intervalo);
             }
         }
         //Reinicia el juego, se reestablecen los valores necesarios y se llama a la funcion de iniciar
         ComrpobarReset(){
             var btnReset=document.getElementById('resetear');
             btnReset.onclick=()=>{
-                document.getElementById('tabla').innerHTML=""
-                document.getElementById('mensaje').innerHTML="Pacman"
+                document.getElementById('tabla').innerHTML="";
+                document.getElementById('mensaje').innerHTML="Pacman";
                 this.array[this.posicionPacman[0]][this.posicionPacman[1]]=0;
                 this.array[this.posicionFantasma[0]][this.posicionFantasma[1]]=0;
                 document.getElementById('botones').style.pointerEvents='auto';
