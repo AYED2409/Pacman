@@ -21,7 +21,7 @@ pacman ={
         init(){
             this.GenerarPosicionPacman();
             this.GenerarPosicionFantasma();
-            this.clonarArray()
+            this.clonarArray();
             this.ComprobarBotones();
             this.ComrpobarReset();
         }
@@ -54,15 +54,15 @@ pacman ={
                         this.posicionFantasma[1]=j;
                     }
                     if(this.array[i][j]==1){
-                        td.setAttribute('id',i+''+j)
-                        td.innerHTML='O'
+                        //td.setAttribute('id',i+''+j)
+                        td.innerHTML='O';
                     }
                     if(this.array[i][j]=="")
                     {   
                         td.innerHTML='O';
                     }
                     if(this.array[i][j]=="" && this.array2[i][j]==2){
-                        td.innerHTML=''
+                        td.innerHTML='';
                     }
                     tr.appendChild(td);
                 }
@@ -70,11 +70,11 @@ pacman ={
         }
         //cuenta los elementos '2' que hay en array2 para saber los puntos que tiene el jugador
         SumarPuntos(){
-            let suma=0
+            let suma=0;
             for(let i=0;i<this.array2.length;i++){
-                suma+=this.array2[i].filter((e)=>e===2).length
+                suma+=this.array2[i].filter((e)=>e===2).length;
             }
-            this.puntos=suma
+            this.puntos=suma;
         }
         //Genera una posición aleatoria de  Pacman en la matriz, en una ubicación distinta de los muros
         GenerarPosicionPacman(){
@@ -129,10 +129,10 @@ pacman ={
                 //console.log("movimiento incorrecto")
             }else{
                 if(arrayPropio[0]==this.posicionPacman[0] && arrayPropio[1]==this.posicionPacman[1]){
-                    this.posicionAnterior[0]=arrayPropio[0]
-                    this.posicionAnterior[1]=arrayPropio[1]
-                    this.array2[this.posicionPacman[0]][this.posicionPacman[1]]=2
-                    this.array2[pos1][pos2]=2
+                    this.posicionAnterior[0]=arrayPropio[0];
+                    this.posicionAnterior[1]=arrayPropio[1];
+                    this.array2[this.posicionPacman[0]][this.posicionPacman[1]]=2;
+                    this.array2[pos1][pos2]=2;
                 }
                 this.array[pos1][pos2]=this.array[arrayPropio[0]][arrayPropio[1]];
                 this.array[arrayPropio[0]][arrayPropio[1]]='';
@@ -145,10 +145,10 @@ pacman ={
                     document.getElementById('botones').style.pointerEvents='none';
                 }
                 if(this.puntos==19){
-                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡YOU WON!!!!!'
-                    document.getElementById('botones').style.pointerEvents='none'
+                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡YOU WON!!!!!';
+                    document.getElementById('botones').style.pointerEvents='none';
                 }
-                this.SumarPuntos()
+                this.SumarPuntos();
             }
             
         }
@@ -189,8 +189,8 @@ pacman ={
         ComrpobarReset(){
             var btnReset=document.getElementById('resetear');
             btnReset.onclick=()=>{
-                document.getElementById('tabla').innerHTML=""
-                document.getElementById('mensaje').innerHTML="Pacman"
+                document.getElementById('tabla').innerHTML="";
+                document.getElementById('mensaje').innerHTML="Pacman";
                 this.array =[
                     [1,'x',1,1,1],
                     [1,1,1,'x',1],

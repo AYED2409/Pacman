@@ -10,7 +10,7 @@ pacman ={
                 [1,'x','x',1,'x'],
                 [1,1,1,1,1]
             ];
-            //posicion Actual de Pacman y fantasma
+            //posicion Actual de Pacman y fantasma, puntos, posicion Anterior de Pacman al moverse, Array2 que contiene las casillas comidas
             this.posicionPacman=[];
             this.posicionFantasma=[];
             this.puntos=0;
@@ -27,6 +27,7 @@ pacman ={
             this.ComrpobarReset();
             this.GenerarIntervalo();
         }
+        //se clona el array para ir marcando las casillas comidas con el valor '2'
         clonarArray(){
             this.array2 = JSON.parse( JSON.stringify(this.array));
        }
@@ -34,7 +35,7 @@ pacman ={
         GenerarIntervalo(){
             this.intervalo=setInterval(()=>this.MoverFantasma(),1000);    
         }
-        //Se recorre la matriz y se pinta NEGRO=muro, AMARILLO=Pacman, Rojo=Fantasma
+        //Se recorre la matriz y se pinta NEGRO=muro, AMARILLO=Pacman, Rojo=Fantasma, 0 si no se ha comido la casilla y ' ' si se ha comido
         PintarMapa(){
             var div =document.getElementById('tabla');
             div.innerHTML="";
@@ -60,27 +61,27 @@ pacman ={
                         this.posicionFantasma[1]=j;
                     }
                     if(this.array[i][j]==1){
-                        td.setAttribute('id',i+''+j)
-                        td.innerHTML='O'
+                        //td.setAttribute('id',i+''+j);
+                        td.innerHTML='O';
                     }
                     if(this.array[i][j]=="")
                     {   
                         td.innerHTML='O';
                     }
                     if(this.array[i][j]=="" && this.array2[i][j]==2){
-                        td.innerHTML=''
+                        td.innerHTML='';
                     }
                     tr.appendChild(td);
                 }
             }
         }
-
+        //suma la cantidad de 2 que hay en cada array (2 indica que se ha comido esa casilla) y lo asigna a puntos
         SumarPuntos(){
-            let suma=0
+            let suma=0;
             for(let i=0;i<this.array2.length;i++){
-                suma+=this.array2[i].filter((e)=>e===2).length
+                suma+=this.array2[i].filter((e)=>e===2).length;
             }
-            this.puntos=suma
+            this.puntos=suma;
         }
         //Genera una posición aleatoria de  Pacman en la matriz, en una ubicación distinta de los muros
         GenerarPosicionPacman(){
@@ -131,10 +132,10 @@ pacman ={
                 //console.log("movimiento incorrecto")
             }else{
                 if(arrayPropio[0]==this.posicionPacman[0] && arrayPropio[1]==this.posicionPacman[1]){
-                    this.posicionAnterior[0]=arrayPropio[0]
-                    this.posicionAnterior[1]=arrayPropio[1]
-                    this.array2[this.posicionPacman[0]][this.posicionPacman[1]]=2
-                    this.array2[pos1][pos2]=2
+                    this.posicionAnterior[0]=arrayPropio[0];
+                    this.posicionAnterior[1]=arrayPropio[1];
+                    this.array2[this.posicionPacman[0]][this.posicionPacman[1]]=2;
+                    this.array2[pos1][pos2]=2;
                 }
                 this.array[pos1][pos2]=this.array[arrayPropio[0]][arrayPropio[1]];
                 this.array[arrayPropio[0]][arrayPropio[1]]='';
@@ -143,17 +144,17 @@ pacman ={
                 if(arrayPropio[0]==arrayEnemigo[0] && arrayPropio[1]==arrayEnemigo[1]){
                     document.getElementById('mensaje').innerHTML='¡¡¡¡¡¡¡GAME OVER!!!!!!!!';
                     this.array[arrayEnemigo[0]][arrayEnemigo[1]]='F';
+                    clearInterval(this.intervalo);
                     this.PintarMapa();
                     document.getElementById('botones').style.pointerEvents='none';
                 }
                 if(this.puntos==19){
-                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡YOU WON!!!!!'
-                    document.getElementById('botones').style.pointerEvents='none'
+                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡YOU WON!!!!!';
+                    document.getElementById('botones').style.pointerEvents='none';
                     clearInterval(this.intervalo);
                 }
-                this.SumarPuntos()
-            }
-            
+                this.SumarPuntos();
+            }  
         }
         //Mueve el fantasma,se genera un numero aleatiro de 0-3(0=arriba,1=izquierda,2=abajo,3=derecha), si no se puede mover a la direccion aleatoria se vuelve a llamar a la funcion hasta generar un movimiento posible
         MoverFantasma(){
@@ -206,7 +207,7 @@ pacman ={
                     [1,1,1,1,1]
                 ];
                 this.puntos=0;
-                this.posicionAnterior=[]
+                this.posicionAnterior=[];
                 document.getElementById('botones').style.pointerEvents='auto';
                 this.init();
             }
