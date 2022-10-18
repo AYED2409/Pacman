@@ -4,25 +4,32 @@ pacman ={
         constructor(){
             //posiciones del mapa
             this.array =[
-                [0,'x',2,3,4],
-                [10,11,12,'x',14],
-                [20,'x',22,23,24],
-                [30,'x','x',33,'x'],
-                [40,41,42,43,44]
+                [1,'x',1,1,1],
+                [1,1,1,'x',1],
+                [1,'x',1,1,1],
+                [1,'x','x',1,'x'],
+                [1,1,1,1,1]
             ];
             //posicion Actual de Pacman y fantasma
             this.posicionPacman=[];
             this.posicionFantasma=[];
+            this.puntos=0;
             this.intervalo=null;
+            this.posicionAnterior=[];
+            this.array2=[];
         }
         //inicio del juego
         init(){
             this.GenerarPosicionPacman();
             this.GenerarPosicionFantasma();
+            this.clonarArray();
             this.ComprobarBotones();
             this.ComrpobarReset();
             this.GenerarIntervalo();
         }
+        clonarArray(){
+            this.array2 = JSON.parse( JSON.stringify(this.array));
+       }
         //mueve el Fantasma cada 1 segundo, se detiene cuando Pacman es comido
         GenerarIntervalo(){
             this.intervalo=setInterval(()=>this.MoverFantasma(),1000);    
@@ -52,9 +59,28 @@ pacman ={
                         this.posicionFantasma[0]=i;
                         this.posicionFantasma[1]=j;
                     }
+                    if(this.array[i][j]==1){
+                        td.setAttribute('id',i+''+j)
+                        td.innerHTML='O'
+                    }
+                    if(this.array[i][j]=="")
+                    {   
+                        td.innerHTML='O';
+                    }
+                    if(this.array[i][j]=="" && this.array2[i][j]==2){
+                        td.innerHTML=''
+                    }
                     tr.appendChild(td);
                 }
             }
+        }
+
+        SumarPuntos(){
+            let suma=0
+            for(let i=0;i<this.array2.length;i++){
+                suma+=this.array2[i].filter((e)=>e===2).length
+            }
+            this.puntos=suma
         }
         //Genera una posición aleatoria de  Pacman en la matriz, en una ubicación distinta de los muros
         GenerarPosicionPacman(){
@@ -104,17 +130,30 @@ pacman ={
             if(pos1>this.array.length-1 || pos2>this.array.length-1 || pos1<0 || pos2<0 || this.array[pos1][pos2]=='x'){
                 //console.log("movimiento incorrecto")
             }else{
+                if(arrayPropio[0]==this.posicionPacman[0] && arrayPropio[1]==this.posicionPacman[1]){
+                    this.posicionAnterior[0]=arrayPropio[0]
+                    this.posicionAnterior[1]=arrayPropio[1]
+                    this.array2[this.posicionPacman[0]][this.posicionPacman[1]]=2
+                    this.array2[pos1][pos2]=2
+                }
                 this.array[pos1][pos2]=this.array[arrayPropio[0]][arrayPropio[1]];
                 this.array[arrayPropio[0]][arrayPropio[1]]='';
                 arrayPropio[0]=pos1;
                 arrayPropio[1]=pos2;
                 if(arrayPropio[0]==arrayEnemigo[0] && arrayPropio[1]==arrayEnemigo[1]){
-                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡¡¡Perdiste!!!!!!!!';
+                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡¡¡GAME OVER!!!!!!!!';
                     this.array[arrayEnemigo[0]][arrayEnemigo[1]]='F';
                     this.PintarMapa();
                     document.getElementById('botones').style.pointerEvents='none';
                 }
+                if(this.puntos==19){
+                    document.getElementById('mensaje').innerHTML='¡¡¡¡¡YOU WON!!!!!'
+                    document.getElementById('botones').style.pointerEvents='none'
+                    clearInterval(this.intervalo);
+                }
+                this.SumarPuntos()
             }
+            
         }
         //Mueve el fantasma,se genera un numero aleatiro de 0-3(0=arriba,1=izquierda,2=abajo,3=derecha), si no se puede mover a la direccion aleatoria se vuelve a llamar a la funcion hasta generar un movimiento posible
         MoverFantasma(){
@@ -159,8 +198,15 @@ pacman ={
             btnReset.onclick=()=>{
                 document.getElementById('tabla').innerHTML="";
                 document.getElementById('mensaje').innerHTML="Pacman";
-                this.array[this.posicionPacman[0]][this.posicionPacman[1]]=0;
-                this.array[this.posicionFantasma[0]][this.posicionFantasma[1]]=0;
+                this.array =[
+                    [1,'x',1,1,1],
+                    [1,1,1,'x',1],
+                    [1,'x',1,1,1],
+                    [1,'x','x',1,'x'],
+                    [1,1,1,1,1]
+                ];
+                this.puntos=0;
+                this.posicionAnterior=[]
                 document.getElementById('botones').style.pointerEvents='auto';
                 this.init();
             }
